@@ -8,7 +8,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Test-1-csye6225-vpc"
+            "Value": "CodeReview-csye6225-vpc"
           }
         ]
       }
@@ -25,7 +25,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Test-1-public-subnet-1"
+            "Value": "CodeReview-public-subnet-1"
           }
         ]
       }
@@ -42,7 +42,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Test-1-private-subnet-1"
+            "Value": "CodeReview-private-subnet-1"
           }
         ]
       }
@@ -59,7 +59,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Test-1-public-subnet-2"
+            "Value": "CodeReview-public-subnet-2"
           }
         ]
       }
@@ -76,7 +76,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Test-1-private-subnet-2"
+            "Value": "CodeReview-private-subnet-2"
           }
         ]
       }
@@ -93,7 +93,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Test-1-public-subnet-3"
+            "Value": "CodeReview-public-subnet-3"
           }
         ]
       }
@@ -110,7 +110,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Test-1-private-subnet-3"
+            "Value": "CodeReview-private-subnet-3"
           }
         ]
       }
@@ -121,7 +121,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Test-1-csye6225-InternetGateway"
+            "Value": "CodeReview-csye6225-InternetGateway"
           }
         ]
       }
@@ -146,7 +146,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "Test-1-csye6225-public-route-table"
+            "Value": "CodeReview-csye6225-public-route-table"
           }
         ]
       }
