@@ -22,11 +22,11 @@
         "KeyName": "supriya-ec2-key",
         "ImageId": "ami-9887c6e7",
         "InstanceType": "t2.micro",
-        "SubnetId": "subnet-0293c3e7a0f18afb6",
+        "SubnetId": "subnet-0cb98233a9aeb67ec",
         "Tags": [
           {
             "Key": "Name",
-            "Value": "new-stack-2-ec2"
+            "Value": "new-stack-3-ec2"
           }
         ]
       }
