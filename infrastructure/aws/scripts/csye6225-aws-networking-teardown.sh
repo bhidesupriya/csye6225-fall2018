@@ -1,10 +1,19 @@
 #!/usr/bin/bash
 
+###################################################################################
+#starting of script
+#Get a VPC Name to delete the data related to VPC
+###################################################################################
+
 echo " Please enter valid VPC name to delete...."
 read vpcName
 
 vpcId=$(aws ec2 describe-vpcs --query "Vpcs[?Tags[?Key=='Name']|[?Value=='$vpcName']].VpcId" --output text)
 echo "vpcId : " $vpcId
+
+###################################################################################
+# Give options to delete vpc, subnet, IG, Route table, etc....
+###################################################################################
 
 echo " Please enter the valid option from below :"
 echo " Vpc Delete - Press 1"
@@ -12,6 +21,10 @@ echo " Subnet Delete - Press 2"
 echo " Internet Gateway Delete - Press 3"
 echo " Route Table Delete - Press 4"
 read input
+
+###################################################################################
+# Flow to delete the vpc directly if user choose to delete vpc by entering a vpc_name
+###################################################################################
 
 if [ $input == "1" ]; then
 	echo "Start deleting Vpc....."
@@ -46,6 +59,12 @@ if [ $input == "1" ]; then
 		echo "Error in deleting vpc..."
 		exit 1
 	fi
+
+
+###################################################################################
+# Flow to delete the subnets directly if user choose to delete subnet by entering subnet_name
+###################################################################################
+
 elif [ $input == "2" ]; then
 #	aws ec2 describe-subnets --filters Name=vpc-id,Values=${vpc_id} | jq -r '.Subnets[].SubnetId'
 	aws ec2 describe-subnets --filters Name=vpc-id,Values=$vpcId | jq -r '.Subnets[].Tags[] | select(.Key == "Name").Value'
@@ -61,6 +80,12 @@ elif [ $input == "2" ]; then
 		echo "Error in deleting subnet.."
 		exit 1
 	fi
+
+
+###################################################################################
+# Flow to delete the Internet Gateway if user choose to delete IG by entering a IG name
+###################################################################################
+
 elif [ $input == "3" ]; then
 	echo " Please enter the name of the Internet Gateway....."
 	read igw_name
@@ -75,6 +100,11 @@ elif [ $input == "3" ]; then
 		echo "Error in deleting Internet Gateway...."
 		exit 1
 	fi
+
+###################################################################################
+# Flow to delete the Route Table directly if user choose to delete Route Table by entering a routeTable_name
+###################################################################################
+
 elif [ $input == "4" ]; then
 	echo "fetching Route table"
 	aws ec2 describe-route-tables --filters Name=vpc-id,Values=$vpcId | jq -r '.RouteTables[] | select(.Tags[].Key == "Name").Tags[].Value,.RouteTableId'
@@ -103,8 +133,15 @@ elif [ $input == "4" ]; then
 		exit 1
 	fi
 
+
+###################################################################################
+# Invalid option selected and End of the script......
+###################################################################################
+
 else
 	echo "Invalid input detected....."
 	exit 1
 fi
+
+##END##
 

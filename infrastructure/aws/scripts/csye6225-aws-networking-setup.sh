@@ -1,18 +1,24 @@
 #!/usr/bin/bash
 
-# define variables
+###################################################################################
+# starting of the script
+# Define Variables
+###################################################################################
 region=us-east-1
 #vpc_cidr_block="20.0.0.0/16"
-###########################
-# Create STACH NAME 
+
+###################################################################################
+# Get a Stack Name
+###################################################################################
 
 echo "Enter STACK_NAME: "
 read STACK_NAME
-#stack_id = $(aws cloudformation create-stack --stack-name $STACK_NAME --template-body file://sampletemplate.json --parameters ParameterKey=KeyPairName,ParameterValue=TestKey ParameterKey=SubnetIDs,ParameterValue=SubnetID1\\,SubnetID2 --query '[StackId]' --output text)
 echo "STACK_NAME entered: " $STACK_NAME
 
-###################################
-# Create VPC with CLI command:
+###################################################################################
+# Get vpc-cidr and create VPC using AWS CLI
+###################################################################################
+
 echo " Creating  VPC..."
 echo "Please enter vpc-cidr block : "
 read vpc_cidr_block
@@ -25,8 +31,10 @@ else
 	exit $vpc_status
 fi
 
-##############################
-#Create Tag for generated VPC
+###################################################################################
+# Create a Tag Name for the generated VPC
+###################################################################################
+
 echo "Creating Tag Name for VPC ..."
 read vpc_tag_name
 aws ec2 create-tags --resources $vpc_id --tags Key=Name,Value=$vpc_tag_name --region $region 2>&1
@@ -42,9 +50,14 @@ fi
 # avail_zones=$(aws ec2 describe-availability-zones)
 # echo $avail_zones
 
-###############################
-# Create Public Subnets
-### public subnet-1
+###################################################################################
+# Create Public Subnets::::::
+###################################################################################
+
+###################################################################################
+# Public Subnet - 1
+###################################################################################
+
 echo "Enter Valid Public subnet-1 cidr-block : "
 read pub_subnet1
 echo "Enter Valid availability Public zone 1 : "
@@ -70,8 +83,9 @@ else
         exit $spub1
 fi
 
-
-### public subnet-2
+###################################################################################
+# Public Subnet - 2
+###################################################################################
 
 echo "Enter Valid Public subnet-2 cidr-block : "
 read pub_subnet2
@@ -99,7 +113,10 @@ else
 fi
 
 
-### Public subnet-3
+###################################################################################
+# Public Subnet - 3
+###################################################################################
+
 echo "Enter Valid subnet-3 cidr-block : "
 read pub_subnet3
 echo "Enter Valid availability public zone 3 : "
@@ -127,11 +144,14 @@ fi
 
 echo "Three Public subnets created successfully...."
 
+###################################################################################
+# Create Private Subnets::::::
+###################################################################################
 
-###############################
-# Create Private Subnets
+###################################################################################
+# Private Subnet - 1
+###################################################################################
 
-#### Private subnet - 1
 echo "Enter Valid Private subnet-1 cidr-block : "
 read pri_subnet1
 echo "Enter Valid availability Private zone 1 : "
@@ -158,8 +178,9 @@ else
         exit $spri1
 fi
 
-
-### Private subnet - 2
+###################################################################################
+# Private Subnet - 2
+###################################################################################
 
 echo "Enter Valid Private subnet-2 cidr-block : "
 read pri_subnet2
@@ -187,7 +208,9 @@ else
         exit $spri2
 fi
 
-### Private Subnet - 3
+###################################################################################
+# Private Subnet - 3
+###################################################################################
 
 echo "Enter Valid Private subnet-3 cidr-block : "
 read pri_subnet3
@@ -217,8 +240,10 @@ fi
 
 echo "Three Private subnets created successfully...."
 
-##########################
-#Create Internet Gateway
+###################################################################################
+# Create Internet Gateway to attach all subnets......
+###################################################################################
+
 echo "Creating internt gateway"
 new_ig_id=$(aws ec2 create-internet-gateway --query 'InternetGateway.[InternetGatewayId]' --output text --region $region 2>&1)
 igw_status=$?
@@ -229,8 +254,10 @@ else
 	exit $igw_status
 fi
 
-###############################
-#Create Tag for Intenet Gateway
+###################################################################################
+# Create a Tag Name for the Internet Gateway.......
+###################################################################################
+
 echo "Adding Name to Internet Gateway..."
 echo "Please enter valid Internet Gateway Name : "
 read igw_tag_name
@@ -243,8 +270,10 @@ else
 	exit $igw_tag_status
 fi
 
-##############################
-#Attach Internet Gateway
+###################################################################################
+# Attach an Internet Gateway to the VPC........
+###################################################################################
+
 echo "Attaching internet gateway to VPC"
 attach_ig=$(aws ec2 attach-internet-gateway --internet-gateway-id $new_ig_id --vpc-id $vpc_id --region $region 2>&1) 
 att_ig_status=$?
@@ -255,7 +284,9 @@ else
 	exit $att_ig_status
 fi
 
-#########################################
+###################################################################################
+# Create a NAT Gateway......
+###################################################################################
 # Creating NAT Gateway
 #echo "Creating NAT Gateway...."
 #alloc_id=$(aws ec2 allocate-address --domain vpc --query '[AllocationId]' --output text)
@@ -266,10 +297,12 @@ fi
 #echo "Please enter valid NAT Gateway Name : "
 #read nat_tag_name
 #aws ec2 create-tags --resources $nat_id --tags "Key=Name,Value=$nat_tag_name" 2>&1
+###################################################################################
 
+###################################################################################
+# Create Public Route Table and Insert the public routes into the table.....
+###################################################################################
 
-##################################
-# Create Public Route Table
 echo "Creating Public Route Table..."
 pub_rt_id=$(aws ec2 create-route-table --vpc-id $vpc_id --query 'RouteTable.[RouteTableId]' --output text --region $region 2>&1)
 pub_rt_status=$?
@@ -280,50 +313,27 @@ else
 	exit $pub_rt_status
 fi
 
-##################################
-# Create Private Route Table
-echo "Creating Private Route Table..."
-pri_rt_id=$(aws ec2 create-route-table --vpc-id $vpc_id --query 'RouteTable.[RouteTableId]' --output text --region $region 2>&1)
-pri_rt_status=$?
-if [ $pri_rt_status -eq 0 ]; then
-        echo "New Private Route Table Created Successfully : " $pri_rt_id
-else
-        echo "Error in creating private  Route Table..."
-        exit $pri_rt_status
-fi
 
-###################################
-# Add Name to Public Route Table
-echo "Adding Name to Public Route Table..."
-echo "Please enter valid Public Route Table Name : "
+###################################################################################
+# Create a Tag Name for the Public Route Table.................
+###################################################################################
+
+echo "Adding Name to Route Table..."
+echo "Please enter valid Route Table Name : "
 read rt_tag_name
 aws ec2 create-tags --resources $pub_rt_id --tags "Key=Name,Value=$rt_tag_name" 2>&1
 rt_tag_status=$?
 if [ $rt_tag_status -eq 0 ]; then
-        echo "Public Route Table Tag created successfully with name : "$rt_tag_name
+        echo "Route Table Tag created successfully with name : "$rt_tag_name
 else
-        echo "Error in creating tag for public Route Table..."
+        echo "Error in creating tag for Route Table..."
         exit $rt_tag_status
 fi
 
+###################################################################################
+# Create route to Internet Gateway....................
+###################################################################################
 
-###################################
-# Add Name to private Route Table
-echo "Adding Name to private Route Table..."
-echo "Please enter valid private Route Table Name : "
-read rt_tag_name_pri
-aws ec2 create-tags --resources $pri_rt_id --tags "Key=Name,Value=$rt_tag_name_pri" 2>&1
-rt_tag_status_pri=$?
-if [ $rt_tag_status_pri -eq 0 ]; then
-        echo "private Route Table Tag created successfully with name : "$rt_tag_name_pri
-else
-        echo "Error in creating tag for private Route Table..."
-        exit $rt_tag_status_pri
-fi
-
-
-#####################################
-# Create Route to Internet Gateway...
 ing_route=$(aws ec2 create-route --route-table-id $pub_rt_id --destination-cidr-block 0.0.0.0/0 --gateway-id $new_ig_id --region $region 2>&1)
 rig_status=$?
 if [ $rig_status -eq 0 ]; then
@@ -335,8 +345,9 @@ fi
 
 
 
-#####################################
+###################################################################################
 # Create Route to NAT Gateway...
+###################################################################################
 #nat_route=$(aws ec2 create-route --route-table-id $pub_rt_id --destination-cidr-block 0.0.0.0/0 --gateway-id $nat_id --region $region 2>&1)
 #rng_status=$?
 #if [ $rng_status -eq 0 ]; then
@@ -346,31 +357,26 @@ fi
 #        exit $rng_status
 #fi
 
-########################################
-# Attach public route to public subnets
+###################################################################################
+
+###################################################################################
+# Attached route to subnets................
+###################################################################################
+
 aws ec2 associate-route-table --route-table-id $pub_rt_id --subnet-id $pub_subid1
 aws ec2 associate-route-table --route-table-id $pub_rt_id --subnet-id $pub_subid2
 aws ec2 associate-route-table --route-table-id $pub_rt_id --subnet-id $pub_subid3
-rt_spub_status=$?
-if [ $rt_spub_status -eq 0 ]; then
-        echo "Public routes associated to public subnet successfully...."
+rt_sub_status=$?
+if [ $rt_sub_status -eq 0 ]; then
+        echo "Route associated to subnet successfully...."
 else
-        echo "Error in associating public routes to public subnets...."
-        exit $rt_spub_status
+        echo "Error in associating Routes to subnets...."
+        exit $rt_sub_status
 fi
 
-
-########################################
-# Attach private route to private subnets
-aws ec2 associate-route-table --route-table-id $pri_rt_id --subnet-id $pri_subid1
-aws ec2 associate-route-table --route-table-id $pri_rt_id --subnet-id $pri_subid2
-aws ec2 associate-route-table --route-table-id $pri_rt_id --subnet-id $pri_subid3
-rt_spri_status=$?
-if [ $rt_spri_status -eq 0 ]; then
-        echo "private Route associated to private subnet successfully...."
-else
-        echo "Error in associating private Routes to subnets...."
-        exit $rt_spri_status
-fi
+###################################################################################
+# End of the Script.. VPC created successfully.... 
+###################################################################################
 
 echo "Script run successfully....."
+
