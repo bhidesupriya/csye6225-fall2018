@@ -80,6 +80,7 @@ function checkFileType(file,callback){
     }
 }
 
+// add test api
 app.get('/hellotest',function(req,res){
     res.send("HelloWorld");
 })
