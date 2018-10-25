@@ -7,7 +7,7 @@
     },
     "s3domain": {
       "Type": "String",
-      "Default": "csye6225-fall2018-bhidesu.me.tld.csye6225.com4"
+      "Default": "csye6225-fall2018-bhidesu.me.tld.csye6225.com"
     }
   },
   "Resources": {
@@ -180,7 +180,7 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "Private",
-        "BucketName": "csye6225-fall2018-bhidesu.me.tld.csye6225.com4",
+        "BucketName": "csye6225-fall2018-bhidesu.me.tld.csye6225.com",
         "Tags": [
           {
             "Key": "csye6225Bucket",
@@ -196,7 +196,7 @@
         "Engine": "MySQL",
         "DBInstanceClass": "db.t2.medium",
         "MultiAZ": "false",
-        "DBInstanceIdentifier": "db-csye6225-fall20184",
+        "DBInstanceIdentifier": "db-csye6225-fall2018",
         "MasterUsername": "csye6225master",
         "MasterUserPassword": "csye6225password",
         "PubliclyAccessible": "false",
@@ -215,7 +215,7 @@
       "Type": "AWS::RDS::DBSubnetGroup",
       "Properties": {
         "DBSubnetGroupDescription": "RDS DB subnet group",
-        "DBSubnetGroupName": "csye6225-dbSubnetGrp4",
+        "DBSubnetGroupName": "csye6225-dbSubnetGrp",
         "SubnetIds": [
           "subnet-07a7ab6fd63c9bced",
           "subnet-006a8176c6c2a5196",
