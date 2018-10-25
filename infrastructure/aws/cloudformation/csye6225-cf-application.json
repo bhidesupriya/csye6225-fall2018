@@ -7,7 +7,7 @@
     },
     "s3domain": {
       "Type": "String",
-      "Default": "csye6225-fall2018-sawalep.me.tld.csye6225.com4"
+      "Default": "csye6225-fall2018-bhidesu.me.tld.csye6225.com4"
     }
   },
   "Resources": {
@@ -21,9 +21,9 @@
         ],
         "ImageId": "ami-9887c6e7",
         "InstanceType": "t2.micro",
-        "SubnetId": "subnet-05f54e890c8f16ab4",
+        "SubnetId": "subnet-0d704e08253c70afc",
         "IamInstanceProfile": "EC2ToS3BucketInstanceProfile",
-        "KeyName": "psawale",
+        "KeyName": "supriya",
         "Tags": [
           {
             "Key": "Name",
@@ -87,8 +87,7 @@
             ]
           }
         }
-      },
-      "DependsOn": "RDS"
+      }
     },
     "csye6225Webapp": {
       "Type": "AWS::EC2::SecurityGroup",
@@ -120,7 +119,7 @@
             "Value": "new-stack-1-ec2"
           }
         ],
-        "VpcId": "vpc-05e22d99c69a79348"
+        "VpcId": "vpc-077e687c3ac617313"
       }
     },
     "csye6225RDS": {
@@ -146,7 +145,7 @@
             "Value": "Assignment3"
           }
         ],
-        "VpcId": "vpc-05e22d99c69a79348"
+        "VpcId": "vpc-077e687c3ac617313"
       }
     },
     "Dynamodb": {
@@ -164,7 +163,7 @@
             "KeyType": "HASH"
           }
         ],
-        "TableName": "dynamo4",
+        "TableName": "myDB",
         "Tags": [
           {
             "Key": "csye6225",
@@ -181,7 +180,7 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "Private",
-        "BucketName": "csye6225-fall2018-sawalep.me.tld.csye6225.com4",
+        "BucketName": "csye6225-fall2018-bhidesu.me.tld.csye6225.com4",
         "Tags": [
           {
             "Key": "csye6225Bucket",
@@ -197,7 +196,7 @@
         "Engine": "MySQL",
         "DBInstanceClass": "db.t2.medium",
         "MultiAZ": "false",
-        "DBInstanceIdentifier": "psawale-sye6225-fall20184",
+        "DBInstanceIdentifier": "db-csye6225-fall20184",
         "MasterUsername": "csye6225master",
         "MasterUserPassword": "csye6225password",
         "PubliclyAccessible": "false",
@@ -216,11 +215,11 @@
       "Type": "AWS::RDS::DBSubnetGroup",
       "Properties": {
         "DBSubnetGroupDescription": "RDS DB subnet group",
-        "DBSubnetGroupName": "psawale-dbSubnetGrp4",
+        "DBSubnetGroupName": "csye6225-dbSubnetGrp4",
         "SubnetIds": [
-          "subnet-0e32c8ede3c5ff249",
-          "subnet-0bc87502777051c71",
-          "subnet-05aa60f0f87ff4a38"
+          "subnet-07a7ab6fd63c9bced",
+          "subnet-006a8176c6c2a5196",
+          "subnet-030b24444cfacdcb9"
         ],
         "Tags": [
           {
@@ -233,7 +232,7 @@
     "csye6225RDSSG": {
       "Type": "AWS::RDS::DBSecurityGroup",
       "Properties": {
-        "EC2VpcId": "vpc-05e22d99c69a79348",
+        "EC2VpcId": "vpc-077e687c3ac617313",
         "DBSecurityGroupIngress": [
           {
             "EC2SecurityGroupId": {
