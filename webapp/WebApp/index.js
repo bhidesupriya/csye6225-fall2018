@@ -82,7 +82,7 @@ function checkFileType(file,callback){
 
 app.get('/hellotest',function(req,res,err){
   if(err){
-  throw err;
+  	throw err;
   }
   else{
     res.send("HelloWorld");
@@ -346,6 +346,35 @@ db.connect((err) =>{
     }
     console.log("Database connected");
 });
+
+// Create Login table
+const createTBLLoginSql = "CREATE table login( username varchar(255), password varchar(255));";
+db.query(createTBLLoginSql, function (err,createSuc) {
+	if(err){
+		throw err;
+	} else {
+		res.send("Login Table Created successfully");
+	}
+});
+
+const createTBLTransactionsSql = "CREATE table transactions (id varchar(255),tran_description varchar(255),merchant varhcar(255),amount varchar(255),transaction_date varchar(255),category varchar(255),username varchar(255),PRIMARY KEY (id));";
+db.query(createTBLTransactionsSql, function (err,createSuc) {
+	if(err){
+		throw err;
+	} else {
+		res.send("Transactions Table Created successfully");
+	}
+});
+
+const createTBLAttachmentsSql = "CREATE table attachments( id varchar(255), receipt varchar(255), transaction_id varchar(255),environment varchar(255));";
+db.query(createTBLAttachmentsSql, function (err,createSuc) {
+	if(err){
+		throw err;
+	} else {
+		res.send("Attachments Table Created successfully");
+	}
+});
+
 
 //register api
 
