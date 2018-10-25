@@ -335,6 +335,8 @@ db.connect((err) =>{
     }
     console.log("Database connected");
 });
+
+// CREATE 
 var database = 'Create database if not exists ' + process.env.DB_NAME;
 db.query(database,function (err,dataa) {
     if(err){
