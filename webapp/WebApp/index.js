@@ -80,7 +80,7 @@ function checkFileType(file,callback){
     }
 }
 
-app.get('/hellotest',function(req,res){
+app.get('/hellotest',function(req,res,err){
   if(err){
   throw err;
   }
