@@ -1,6 +1,6 @@
 const config = {
 	aws : {
-	bucket_name : "dummy-bucket-152"
+	bucket_name : "csye6225-fall2018-bhidesu.me.tld.csye6225.com"
 	}
 };
 
