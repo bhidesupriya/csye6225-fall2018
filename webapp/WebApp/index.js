@@ -309,17 +309,17 @@ app.delete('/transactions/:id/attachments/:attachmentId',function (req,res) {
 app.use(function (req,res,next) {
 
     res.header("Access-Control-Allow-Methods","GET,PUT,POST,DELETE,OPTIONS");
-    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control-Allow-Origin","*;
     res.header("Access-Control-Allow-Headers","Origin,X-Requested-With,Content-Type,Accept");
     next();
 })
 
 //create the connection
 const db =mysql.createConnection({
-    host     : 'localhost',
-    user     :  'root',
-    password : 'Hardik-2010',
-    database : 'WebApp'
+    host     : 'db-csye6225-fall2018.cmuur4qfccwc.us-east-1.rds.amazonaws.com',
+    user     :  'csye6225master',
+    password : 'csye6225password',
+    database : 'csye6225'
 });
 
 //start the server
