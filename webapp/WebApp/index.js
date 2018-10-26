@@ -321,7 +321,7 @@ app.on('listening',function(){
 });
 
 //start the server
-app.listen('9000',()=>{
+app.listen('3000',()=>{
 
   // console.log(process.env.NODE_ENV);
    //console.log(process.env.DB_NAME);

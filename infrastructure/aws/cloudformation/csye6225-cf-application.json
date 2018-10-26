@@ -23,7 +23,7 @@
         "InstanceType": "t2.micro",
         "SubnetId": "subnet-0cc380f63f7aa14eb",
         "IamInstanceProfile": "EC2ToS3BucketInstanceProfile",
-        "KeyName": "ronak",
+        "KeyName": "supriya",
         "Tags": [
           {
             "Key": "Name",
