@@ -2,6 +2,7 @@ echo "Please Enter a Name for the stack you want to delete"
 read stack_name
 
 echo "Deleting S3 bucket............"
+
 bucketname=`aws cloudformation describe-stacks --stack-name ${stack_name} | jq -r '.Stacks[].Parameters[] | select(.ParameterKey == "s3domain").ParameterValue' `
 
 if [ -n "$bucketname" ]; then

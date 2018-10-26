@@ -7,7 +7,7 @@
     },
     "s3domain": {
       "Type": "String",
-      "Default": "csye6225-fall2018-bhidesu.me.tld.csye6225.com"
+      "Default": "csye6225-fall2018-shingalar.me.tld.csye6225.com"
     }
   },
   "Resources": {
@@ -21,9 +21,9 @@
         ],
         "ImageId": "ami-9887c6e7",
         "InstanceType": "t2.micro",
-        "SubnetId": "subnet-0d704e08253c70afc",
+        "SubnetId": "subnet-0cc380f63f7aa14eb",
         "IamInstanceProfile": "EC2ToS3BucketInstanceProfile",
-        "KeyName": "supriya",
+        "KeyName": "ronak",
         "Tags": [
           {
             "Key": "Name",
@@ -130,7 +130,7 @@
             "Value": "new-stack-1-ec2"
           }
         ],
-        "VpcId": "vpc-077e687c3ac617313"
+        "VpcId": "vpc-08e3d771038169da7"
       }
     },
     "csye6225RDS": {
@@ -156,7 +156,7 @@
             "Value": "Assignment3"
           }
         ],
-        "VpcId": "vpc-077e687c3ac617313"
+        "VpcId": "vpc-08e3d771038169da7"
       }
     },
     "Dynamodb": {
@@ -174,7 +174,7 @@
             "KeyType": "HASH"
           }
         ],
-        "TableName": "ahahahha",
+        "TableName": "myDB1",
         "Tags": [
           {
             "Key": "csye6225",
@@ -191,7 +191,7 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "Private",
-        "BucketName": "csye6225-fall2018-bhidesu.me.tld.csye6225.com",
+        "BucketName": "csye6225-fall2018-shingalar.me.tld.csye6225.com",
         "Tags": [
           {
             "Key": "csye6225Bucket",
@@ -207,7 +207,7 @@
         "Engine": "MySQL",
         "DBInstanceClass": "db.t2.medium",
         "MultiAZ": "false",
-        "DBInstanceIdentifier": "bhidesu-csye6225-fall2018",
+        "DBInstanceIdentifier": "rshingala-csye6225-fall2018",
         "MasterUsername": "csye6225master",
         "MasterUserPassword": "csye6225password",
         "PubliclyAccessible": "false",
@@ -226,11 +226,11 @@
       "Type": "AWS::RDS::DBSubnetGroup",
       "Properties": {
         "DBSubnetGroupDescription": "RDS DB subnet group",
-        "DBSubnetGroupName": "csye6225-dbSubnetGrp",
+        "DBSubnetGroupName": "rshingala-dbSubnetGrp",
         "SubnetIds": [
-          "subnet-07a7ab6fd63c9bced",
-          "subnet-006a8176c6c2a5196",
-          "subnet-030b24444cfacdcb9"
+          "subnet-076012d2712d49ad9",
+          "subnet-00fc352fdfcc7abb2",
+          "subnet-03dab88d1d259db9b"
         ],
         "Tags": [
           {
@@ -243,7 +243,7 @@
     "csye6225RDSSG": {
       "Type": "AWS::RDS::DBSecurityGroup",
       "Properties": {
-        "EC2VpcId": "vpc-077e687c3ac617313",
+        "EC2VpcId": "vpc-08e3d771038169da7",
         "DBSecurityGroupIngress": [
           {
             "EC2SecurityGroupId": {
