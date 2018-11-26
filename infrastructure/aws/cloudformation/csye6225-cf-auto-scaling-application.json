@@ -270,6 +270,7 @@
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
       "Properties": {
         "Scheme": "internet-facing",
+        "Name": "LoadBalancerName",
         "Subnets": [
           "subnet-0e69017bca1e2bddc",
           "subnet-0438b9a6bd8e5bd4b",
@@ -780,6 +781,18 @@
             "Ref": "WebServerGroup"
           }
         ],
+        "LoadBalancerInfo": {
+          "ElbInfoList": [
+            {
+              "Name": {
+                "Fn::GetAtt": [
+                  "MyLoadBalancer",
+                  "LoadBalancerName"
+                ]
+              }
+            }
+          ]
+        },
         "ServiceRoleArn": {
           "Fn::GetAtt": [
             "CodeDeployServiceRole",
@@ -788,6 +801,19 @@
         },
         "DeploymentGroupName": {
           "Ref": "depname"
+        }
+      }
+    },
+    "MyRecordSet": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "HostedZoneName" : {"Fn::Join" : ["",[{"Ref" : "HostedZoneName"},"."]] },
+        "Name": {"Fn::Join" : ["",["www.",{"Ref" : "HostedZoneName"},"."]] },
+        "Type": "A",
+        "AliasTarget": {
+          "HostedZoneId" : {"Fn::GetAtt": ["MyLoadBalancer", "CanonicalHostedZoneID"]},
+          "DNSName": {"Fn::GetAtt": ["MyLoadBalancer", "DNSName"]},
+          "EvaluateTargetHealth": "false"
         }
       }
     }
