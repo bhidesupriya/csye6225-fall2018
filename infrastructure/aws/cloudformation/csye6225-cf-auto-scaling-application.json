@@ -779,14 +779,14 @@
       "Properties": {
         "AccessControl": "Private",
         "BucketName": "csye6225-fall2018-nirmalj.me.tld.csye6225.com",
-        "Ref": "s3domain"
-      },
-      "Tags": [
-        {
-          "Key": "csye6225Bucket",
-          "Value": "bhidesuBucket"
-        }
-      ]
+          "Ref": "s3domain"
+        },
+        "Tags": [
+          {
+            "Key": "csye6225Bucket",
+            "Value": "bhidesuBucket"
+          }
+        ]
     },
     "RDS": {
       "Type": "AWS::RDS::DBInstance",
