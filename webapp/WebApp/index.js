@@ -567,7 +567,17 @@ app.post('/transaction',(req,res) => {
                         }
                         if(transac)
                         {
-                            res.status(201).json(transac);
+                            let success_sql = `SELECT * from transactions where id= "${uidtesting}"`;
+                            db.query(success_sql,function(err,succeee){
+                                if(err){
+                                    console.log(err);
+                                    throw err;
+                                }
+                                if(succeee){
+                                    res.status(201).json(succeee);
+                                }
+                            });
+                           
                         }
                         if(!transac)
                         {
