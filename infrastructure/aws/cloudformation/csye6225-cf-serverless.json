@@ -8,7 +8,7 @@
   },
   "s3domain": {
     "Type": "String",
-    "Default": "csye6225-fall2018-bhidesu.me.tld.csye6225.com"
+    "Default": "code-deploy.csye6225-fall2018-sawale.me"
   },
   "fnName": {
     "Type": "String",

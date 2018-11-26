@@ -8,7 +8,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "networking-stack-csye6225-vpc"
+            "Value": "net-csye6225-vpc"
           }
         ]
       }
@@ -25,7 +25,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "networking-stack-public-subnet-1"
+            "Value": "net-public-subnet-1"
           }
         ]
       }
@@ -42,7 +42,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "networking-stack-private-subnet-1"
+            "Value": "net-private-subnet-1"
           }
         ]
       }
@@ -59,7 +59,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "networking-stack-public-subnet-2"
+            "Value": "net-public-subnet-2"
           }
         ]
       }
@@ -76,7 +76,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "networking-stack-private-subnet-2"
+            "Value": "net-private-subnet-2"
           }
         ]
       }
@@ -93,7 +93,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "networking-stack-public-subnet-3"
+            "Value": "net-public-subnet-3"
           }
         ]
       }
@@ -110,7 +110,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "networking-stack-private-subnet-3"
+            "Value": "net-private-subnet-3"
           }
         ]
       }
@@ -121,7 +121,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "networking-stack-csye6225-InternetGateway"
+            "Value": "net-csye6225-InternetGateway"
           }
         ]
       }
@@ -146,7 +146,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "networking-stack-csye6225-public-route-table"
+            "Value": "net-csye6225-public-route-table"
           }
         ]
       }
@@ -206,7 +206,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "networking-stack-csye6225-private-route-table"
+            "Value": "net-csye6225-private-route-table"
           }
         ]
       }
