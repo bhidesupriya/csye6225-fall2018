@@ -1,12 +1,65 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "Protection List"
+          },
+          "Parameters": [
+            "SqlInjectionProtectionParam",
+            "CrossSiteScriptingProtectionParam",
+            "ActivateHttpFloodProtectionParam"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Settings"
+          },
+          "Parameters": [
+            "AccessLogBucket"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Advanced Settings"
+          },
+          "Parameters": [
+            "RequestThreshold",
+            "ErrorThreshold",
+            "WAFBlockPeriod"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Anonymous Metrics Request"
+          },
+          "Parameters": [
+            "SendAnonymousUsageData"
+          ]
+        }
+      ],
+      "ParameterLabels": {
+        "SqlInjectionProtectionParam": {
+          "default": "Activate SQL Injection Protection"
+        },
+        "ActivateHttpFloodProtectionParam": {
+          "default": "Activate HTTP Flood Protection"
+        },
+        "RequestThreshold": {
+          "default": "Request Threshold"
+        }
+      }
+    }
+  },
   "Parameters": {
     "myAccountId": {
       "Type": "String"
     },
     "s3domain": {
       "Type": "String",
-      "Default": "csye6225-fall2018-sawale.me.tld.csye6225.com"
+      "Default": "csye6225-fall2018-bhidesu.me.tld.csye6225.com"
     },
     "s3codedeploy": {
       "Type": "String"
@@ -46,9 +99,210 @@
     "accid": {
       "Description": "Account Id",
       "Type": "String"
+    },
+    "SqlInjectionProtectionParam": {
+      "Type": "String",
+      "Default": "yes",
+      "AllowedValues": [
+        "yes",
+        "no"
+      ],
+      "Description": "Choose yes to enable the component designed to block common SQL injection attacks."
+    },
+    "ActivateHttpFloodProtectionParam": {
+      "Type": "String",
+      "Default": "yes",
+      "AllowedValues": [
+        "yes",
+        "no"
+      ],
+      "Description": "Choose yes to enable the component designed to block HTTP flood attacks."
+    },
+    "RequestThreshold": {
+      "Type": "Number",
+      "Default": "2000",
+      "MinValue": "2000",
+      "Description": "If you chose yes for the Activate HTTP Flood Protection parameter, enter the maximum acceptable requests per FIVE-minute period per IP address. Minimum value of 2000. If you chose to deactivate this protection, ignore this parameter."
+    }
+  },
+  "Conditions": {
+    "SqlInjectionProtectionActivated": {
+      "Fn::Equals": [
+        {
+          "Ref": "SqlInjectionProtectionParam"
+        },
+        "yes"
+      ]
+    },
+    "HttpFloodProtectionActivated": {
+      "Fn::Equals": [
+        {
+          "Ref": "ActivateHttpFloodProtectionParam"
+        },
+        "yes"
+      ]
+    },
+    "CreateWebACL": {
+      "Fn::Or": [
+        {
+          "Condition": "SqlInjectionProtectionActivated"
+        },
+        {
+          "Condition": "HttpFloodProtectionActivated"
+        }
+      ]
     }
   },
   "Resources": {
+    "MyWebACLAssociation": {
+      "Type": "AWS::WAFRegional::WebACLAssociation",
+      "Properties": {
+        "ResourceArn": {
+          "Ref": "MyLoadBalancer"
+        },
+        "WebACLId": {
+          "Ref": "WAFWebACL"
+        }
+      }
+    },
+    "WAFSqlInjectionDetection": {
+      "Type": "AWS::WAFRegional::SqlInjectionMatchSet",
+      "Condition": "SqlInjectionProtectionActivated",
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            " - ",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "SQL injection Detection"
+            ]
+          ]
+        },
+        "SqlInjectionMatchTuples": [
+          {
+            "FieldToMatch": {
+              "Type": "QUERY_STRING"
+            },
+            "TextTransformation": "URL_DECODE"
+          },
+          {
+            "FieldToMatch": {
+              "Type": "QUERY_STRING"
+            },
+            "TextTransformation": "HTML_ENTITY_DECODE"
+          },
+          {
+            "FieldToMatch": {
+              "Type": "BODY"
+            },
+            "TextTransformation": "URL_DECODE"
+          },
+          {
+            "FieldToMatch": {
+              "Type": "BODY"
+            },
+            "TextTransformation": "HTML_ENTITY_DECODE"
+          },
+          {
+            "FieldToMatch": {
+              "Type": "URI"
+            },
+            "TextTransformation": "URL_DECODE"
+          },
+          {
+            "FieldToMatch": {
+              "Type": "URI"
+            },
+            "TextTransformation": "HTML_ENTITY_DECODE"
+          },
+          {
+            "FieldToMatch": {
+              "Type": "HEADER",
+              "Data": "Cookie"
+            },
+            "TextTransformation": "URL_DECODE"
+          },
+          {
+            "FieldToMatch": {
+              "Type": "HEADER",
+              "Data": "Cookie"
+            },
+            "TextTransformation": "HTML_ENTITY_DECODE"
+          },
+          {
+            "FieldToMatch": {
+              "Type": "HEADER",
+              "Data": "Authorization"
+            },
+            "TextTransformation": "URL_DECODE"
+          },
+          {
+            "FieldToMatch": {
+              "Type": "HEADER",
+              "Data": "Authorization"
+            },
+            "TextTransformation": "HTML_ENTITY_DECODE"
+          }
+        ]
+      }
+    },
+    "WAFSqlInjectionRule": {
+      "Type": "AWS::WAFRegional::Rule",
+      "Condition": "SqlInjectionProtectionActivated",
+      "DependsOn": "WAFSqlInjectionDetection",
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            " - ",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "SQL Injection Rule"
+            ]
+          ]
+        },
+        "MetricName": "SecurityAutomationsSqlInjectionRule",
+        "Predicates": [
+          {
+            "DataId": {
+              "Ref": "WAFSqlInjectionDetection"
+            },
+            "Negated": false,
+            "Type": "SqlInjectionMatch"
+          }
+        ]
+      }
+    },
+    "WAFWebACL": {
+      "Type": "AWS::WAFRegional::WebACL",
+      "Condition": "CreateWebACL",
+      "DependsOn": [
+        "WAFSqlInjectionRule"
+      ],
+      "Properties": {
+        "Name": {
+          "Ref": "AWS::StackName"
+        },
+        "DefaultAction": {
+          "Type": "ALLOW"
+        },
+        "MetricName": "SecurityAutomationsMaliciousRequesters",
+        "Rules": [
+          {
+            "Action": {
+              "Type": "BLOCK"
+            },
+            "Priority": 1,
+            "RuleId": {
+              "Ref": "WAFSqlInjectionRule"
+            }
+          }
+        ]
+      }
+    },
     "WebServerGroup": {
       "Type": "AWS::AutoScaling::AutoScalingGroup",
       "Properties": {
@@ -60,9 +314,9 @@
           }
         ],
         "VPCZoneIdentifier": [
-          "subnet-0e69017bca1e2bddc",
-          "subnet-0438b9a6bd8e5bd4b",
-          "subnet-0d342052d25de8a16"
+          "subnet-060c7e62255166408",
+          "subnet-03cb6780452597885",
+          "subnet-091a5a42a977eef07"
         ],
         "LaunchConfigurationName": {
           "Ref": "ASGLaunchConfig"
@@ -272,9 +526,9 @@
         "Scheme": "internet-facing",
         "Name": "LoadBalancerName",
         "Subnets": [
-          "subnet-0e69017bca1e2bddc",
-          "subnet-0438b9a6bd8e5bd4b",
-          "subnet-0d342052d25de8a16"
+          "subnet-060c7e62255166408",
+          "subnet-03cb6780452597885",
+          "subnet-091a5a42a977eef07"
         ],
         "LoadBalancerAttributes": [
           {
@@ -524,11 +778,13 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "Private",
-        "BucketName": "csye6225-fall2018-sawale.me.tld.csye6225.com",
+        "BucketName": {
+          "Ref": "s3domain"
+        },
         "Tags": [
           {
             "Key": "csye6225Bucket",
-            "Value": "psawaleBucket"
+            "Value": "bhidesuBucket"
           }
         ]
       }
@@ -563,9 +819,9 @@
           "Ref": "DBSubnetGroupName"
         },
         "SubnetIds": [
-          "subnet-0c67d71c8cab71426",
-          "subnet-05865b20f5ba8f0be",
-          "subnet-0f4888dcd3d1b98dd"
+          "subnet-051b4a4687ce33ce1",
+          "subnet-0067d7726cbeae3fb",
+          "subnet-04d44c1567f59c77a"
         ],
         "Tags": [
           {
