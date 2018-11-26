@@ -70,11 +70,11 @@
     },
     "senderEmail": {
       "Type": "String",
-      "Default": "noreply@csye6225-fall2018-sawale.me"
+      "Default": "noreply@csye6225-fall2018-nirmalj.me"
     },
     "SSLArn": {
       "Type": "String",
-      "Default": "csye6225-fall2018-sawale.me"
+      "Default": "csye6225-fall2018-nirmalj.me"
     },
     "VpcId": {
       "Type": "String"
@@ -314,9 +314,9 @@
           }
         ],
         "VPCZoneIdentifier": [
-          "subnet-060c7e62255166408",
-          "subnet-03cb6780452597885",
-          "subnet-091a5a42a977eef07"
+          "subnet-0c5209e394b60e4a2",
+          "subnet-02d25f20c4854b1a4",
+          "subnet-0b74f39ab64507e3e"
         ],
         "LaunchConfigurationName": {
           "Ref": "ASGLaunchConfig"
@@ -525,9 +525,9 @@
       "Properties": {
         "Scheme": "internet-facing",
         "Subnets": [
-          "subnet-060c7e62255166408",
-          "subnet-03cb6780452597885",
-          "subnet-091a5a42a977eef07"
+          "subnet-0c5209e394b60e4a2",
+          "subnet-02d25f20c4854b1a4",
+          "subnet-0b74f39ab64507e3e"
         ],
         "LoadBalancerAttributes": [
           {
@@ -777,7 +777,7 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "Private",
-        "BucketName": {
+        "BucketName": "csye6225-fall2018-nirmalj.me.tld.csye6225.com",
           "Ref": "s3domain"
         },
         "Tags": [
@@ -786,7 +786,7 @@
             "Value": "bhidesuBucket"
           }
         ]
-      }
+      
     },
     "RDS": {
       "Type": "AWS::RDS::DBInstance",
@@ -818,9 +818,9 @@
           "Ref": "DBSubnetGroupName"
         },
         "SubnetIds": [
-          "subnet-051b4a4687ce33ce1",
-          "subnet-0067d7726cbeae3fb",
-          "subnet-04d44c1567f59c77a"
+          "subnet-0653239669572a664",
+          "subnet-09b54df2755900090",
+          "subnet-063c8cc2317ef9725"
         ],
         "Tags": [
           {
