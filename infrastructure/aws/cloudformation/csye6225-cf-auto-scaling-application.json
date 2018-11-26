@@ -524,6 +524,7 @@
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
       "Properties": {
         "Scheme": "internet-facing",
+        "Name": "LoadBalancerName",
         "Subnets": [
           "subnet-0c5209e394b60e4a2",
           "subnet-02d25f20c4854b1a4",
@@ -786,7 +787,6 @@
             "Value": "bhidesuBucket"
           }
         ]
-      
     },
     "RDS": {
       "Type": "AWS::RDS::DBInstance",
@@ -1036,6 +1036,18 @@
             "Ref": "WebServerGroup"
           }
         ],
+        "LoadBalancerInfo": {
+          "ElbInfoList": [
+            {
+              "Name": {
+                "Fn::GetAtt": [
+                  "MyLoadBalancer",
+                  "LoadBalancerName"
+                ]
+              }
+            }
+          ]
+        },
         "ServiceRoleArn": {
           "Fn::GetAtt": [
             "CodeDeployServiceRole",
